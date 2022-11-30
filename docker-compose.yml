@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management
+    networks:
+      - default
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq
+
+  sprint-db:
+    container_name: sprint-db
+    image: mongo
+    networks: 
+      - default
+    ports: 
+      - "27018:27017"
+    volumes: 
+      - mongodbdata:/data/db/sprint
+
+  sprint-service:
+    container_name: sprint-service
+    image: ghcr.io/miraplanner/sprint-service:master
+    depends_on: 
+        - sprint-db
+        - rabbitmq
+    ports:
+      - 5005:80
+    networks:
+      - default
+    environment:
+      ASPNETCORE_ENVIRONMENT: Staging
+
+  issue-db:
+    container_name: issue-db
+    image: mongo
+    networks: 
+      - default
+    ports: 
+      - "27017:27017"
+    volumes: 
+      - mongodbdata:/data/db
+
+  issue-service:
+    container_name: issue-service
+    image: ghcr.io/miraplanner/issue-service:master
+    depends_on: 
+    - issue-db
+    - rabbitmq
+    ports:
+      - 5001:80
+    networks:
+      - default
+    environment:
+      ASPNETCORE_ENVIRONMENT: Staging
+
+networks:
+  default:
+    name: mira
+
+volumes:
+  rabbitmqdata:
+  mongodbdata:
