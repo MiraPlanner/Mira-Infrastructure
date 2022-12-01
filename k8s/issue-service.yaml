@@ -20,6 +20,15 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
+          env:
+            - name: MongoDBSettings__Username
+              value: admin
+            - name: MongoDBSettings__Password
+              value: password
+            - name: MongoDBSettings__Host
+              value: issue-db
+            - name: MongoDBSettings__Port
+              value: "27017"
           resources:
             requests:
               memory: "64Mi"
