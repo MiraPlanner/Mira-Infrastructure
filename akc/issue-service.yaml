@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: issueapi-deployment
+  labels:
+    app: issueapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: issueapi
+  template:
+    metadata:
+      labels:
+        app: issueapi
+    spec:
+      containers:
+        - name: issueapi
+          image: milankosteracr.azurecr.io/issue-service:v1
+          ports:
+            - containerPort: 80
+          env:
+            - name: MongoDBSettings__Username
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-root-username  
+            - name: MongoDBSettings__Password
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-root-password   
+            - name: MongoDBSettings__Host
+              value: issue-db
+            - name: MongoDBSettings__Port
+              value: "27017"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: issueapi-service
+spec:
+  type: NodePort
+  selector:
+    app: issueapi
+  ports:
+    - protocol: TCP
+      port: 80
