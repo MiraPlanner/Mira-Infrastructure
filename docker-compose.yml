@@ -1,6 +1,18 @@
 version: "3.8"
 
 services:
+  nginx:
+    image: nginx:latest
+    networks:
+      - default
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    ports:
+      - 80:80
+      - 5001:5001
+      - 5005:5005
+  
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:management
@@ -29,8 +41,8 @@ services:
     depends_on: 
         - sprint-db
         - rabbitmq
-    ports:
-      - 5005:80
+    expose:
+      - 80
     networks:
       - default
     environment:
@@ -52,8 +64,8 @@ services:
     depends_on: 
     - issue-db
     - rabbitmq
-    ports:
-      - 5001:80
+    expose:
+      - 80
     networks:
       - default
     environment:
