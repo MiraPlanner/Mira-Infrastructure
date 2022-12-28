@@ -46,7 +46,7 @@ services:
     networks:
       - default
     environment:
-      ASPNETCORE_ENVIRONMENT: Staging
+      ASPNETCORE_ENVIRONMENT: Development
 
   issue-db:
     container_name: issue-db
@@ -69,7 +69,7 @@ services:
     networks:
       - default
     environment:
-      ASPNETCORE_ENVIRONMENT: Staging
+      ASPNETCORE_ENVIRONMENT: Development
 
   mira-view:
     container_name: mira-view
