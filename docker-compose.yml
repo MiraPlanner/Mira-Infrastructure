@@ -33,7 +33,7 @@ services:
     networks: 
       - default
     volumes: 
-      - mongodbdata:/data/db/sprints
+      - ./data/db-sprints:/data/db
 
   sprint-service:
     container_name: sprint-service
@@ -56,7 +56,7 @@ services:
     networks: 
       - default
     volumes: 
-      - mongodbdata:/data/db/issues
+      - ./data/db-issues:/data/db
 
   issue-service:
     container_name: issue-service
