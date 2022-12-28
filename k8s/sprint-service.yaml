@@ -35,6 +35,8 @@ spec:
               value: sprint-db
             - name: MongoDBSettings__Port
               value: "27017"
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Staging"
           resources:
             requests:
               memory: "64Mi"

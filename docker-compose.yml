@@ -28,19 +28,19 @@ services:
   sprint-db:
     container_name: sprint-db
     image: mongo
-    networks: 
-      - default
     ports: 
       - "27018:27017"
+    networks: 
+      - default
     volumes: 
-      - mongodbdata:/data/db/sprint
+      - mongodbdata:/data/db/sprints
 
   sprint-service:
     container_name: sprint-service
     image: ghcr.io/miraplanner/sprint-service:master
     depends_on: 
-        - sprint-db
-        - rabbitmq
+      - sprint-db
+      - rabbitmq
     expose:
       - 80
     networks:
@@ -51,25 +51,39 @@ services:
   issue-db:
     container_name: issue-db
     image: mongo
-    networks: 
-      - default
     ports: 
       - "27017:27017"
+    networks: 
+      - default
     volumes: 
-      - mongodbdata:/data/db
+      - mongodbdata:/data/db/issues
 
   issue-service:
     container_name: issue-service
     image: ghcr.io/miraplanner/issue-service:master
     depends_on: 
-    - issue-db
-    - rabbitmq
+      - issue-db
+      - rabbitmq
     expose:
       - 80
     networks:
       - default
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
+
+  mira-view:
+    container_name: mira-view
+    image: ghcr.io/miraplanner/mira-view:master
+    depends_on:
+      - issue-service
+      - sprint-service
+      - nginx
+    ports:
+      - "3000:3000"
+    networks:
+      - default
+    environment:
+      REACT_APP_API_URL: "http://localhost:80"
 
 networks:
   default:

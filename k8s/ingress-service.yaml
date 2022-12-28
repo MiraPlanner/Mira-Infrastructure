@@ -6,21 +6,21 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
+  ingressClassName: nginx
   rules:
-    - host: mira.com
-      http:
+    - http:
         paths:
-          - path: /sprints
-            pathType: Prefix
-            backend:
-              service:
-                name: sprintapi-service
-                port:
-                  number: 80
-          - path: /issues
-            pathType: Prefix
-            backend:
-              service:
-                name: issueapi-service
-                port:
-                  number: 80
+        - path: /sprints
+          pathType: Prefix
+          backend:
+            service:
+              name: sprintapi-service
+              port:
+                number: 80
+        - path: /issues
+          pathType: Prefix
+          backend:
+            service:
+              name: issueapi-service
+              port:
+                number: 80
